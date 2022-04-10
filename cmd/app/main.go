@@ -163,7 +163,7 @@ func convertHex2Dec(query string) {
 }
 
 func convertDec2Hex(query string) {
-	n, err := strconv.Atoi(query)
+	n, err := strconv.ParseInt(query, 10, 64)
 	if err != nil {
 		panic(err)
 	}
