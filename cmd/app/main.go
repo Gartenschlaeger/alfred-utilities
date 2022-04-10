@@ -55,7 +55,11 @@ func convertBinUnit(query string) {
 	if err != nil {
 		panic(err)
 	} else {
-		wf.NewItem(strconv.FormatInt(result, 10))
+		convertedResult := strconv.FormatInt(result, 10)
+
+		item := wf.NewItem(convertedResult)
+		item.Valid(true)
+		item.Arg(convertedResult)
 	}
 }
 
@@ -72,5 +76,9 @@ func convertHexUnit(query string) {
 		}
 	}
 
-	wf.NewItem(strings.Join(results, " "))
+	convertedResult := strings.Join(results, " ")
+
+	item := wf.NewItem(convertedResult)
+	item.Valid(true)
+	item.Arg(convertedResult)
 }
