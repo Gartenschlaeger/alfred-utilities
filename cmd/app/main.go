@@ -31,9 +31,9 @@ func run() {
 	query := args[1]
 
 	switch unit {
-	case "bin":
+	case "bin2dec":
 		convertBinUnit(query)
-	case "hex":
+	case "hex2dec":
 		convertHexUnit(query)
 	case "url":
 		convertUrl(query)
