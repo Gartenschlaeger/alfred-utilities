@@ -24,12 +24,6 @@ func run() {
 		panic("At least two arguments are expected")
 	}
 
-	//log.Printf("alfred_workflow_bundleid = '%v'\n", env.Get("alfred_workflow_bundleid"))
-	//log.Printf("alfred_workflow_cache = '%v'\n", env.Get("alfred_workflow_cache"))
-	//log.Printf("alfred_workflow_data = '%v'\n", env.Get("alfred_workflow_data"))
-
-	//log.Printf("Arguments count = %v\n", len(args))
-
 	unit := args[0]
 	unit = strings.ToLower(unit)
 
@@ -70,7 +64,7 @@ func convertHexUnit(query string) {
 	for i := 0; i < len(fields); i++ {
 		n, err := strconv.ParseInt(fields[i], 16, 64)
 		if err != nil {
-			results = append(results, "ERROR")
+			panic(err)
 		} else {
 			results = append(results, strconv.FormatInt(n, 10))
 		}
