@@ -25,58 +25,60 @@ func run() {
 		panic("At least two arguments are expected")
 	}
 
-	unit := args[0]
-	unit = strings.ToLower(unit)
+	operation := args[0]
+	operation = strings.ToLower(operation)
 
 	query := args[1]
 
-	switch unit {
+	switch operation {
+
 	case "bin2dec":
-		convertBinUnit(query)
+		convertBinDec(query)
 	case "hex2dec":
-		convertHexUnit(query)
+		convertHex2Dec(query)
+
 	case "url":
-		convertUrl(query)
+		parseUrl(query)
 
 	default:
-		panic(fmt.Sprintf("%v is an unknown unit", unit))
+		panic(fmt.Sprintf("'%s' is an unknown operation", operation))
 	}
 
 	wf.SendFeedback()
 }
 
-func addItem(title string, subTitle string, copyText string) {
+func addWorkflowItem(title string, subTitle string, copyText string) {
 	item := wf.NewItem(title)
 	item.Subtitle(subTitle)
 	item.Arg(copyText)
 	item.Valid(true)
 }
 
-func convertUrl(query string) {
+func parseUrl(query string) {
 	url, err := url.Parse(query)
 	if err != nil {
 		panic(err)
 	}
 
 	if len(url.Scheme) > 0 {
-		addItem("Scheme", url.Scheme, url.Scheme)
+		addWorkflowItem("Scheme", url.Scheme, url.Scheme)
 	}
 
 	if len(url.Host) > 0 {
-		addItem("Host", url.Host, url.Host)
+		addWorkflowItem("Host", url.Host, url.Host)
 	}
 
 	urlPort := url.Port()
 	if len(urlPort) > 0 {
-		addItem("Port", urlPort, urlPort)
+		addWorkflowItem("Port", urlPort, urlPort)
 	}
 
 	if len(url.Path) > 0 {
-		addItem("Path", url.Path, url.Path)
+		addWorkflowItem("Path", url.Path, url.Path)
 	}
 
 	if len(url.Fragment) > 0 {
-		addItem("Fragment", url.Fragment, url.Fragment)
+		addWorkflowItem("Fragment", url.Fragment, url.Fragment)
 	}
 
 	urlQuery := url.Query()
@@ -88,7 +90,7 @@ func convertUrl(query string) {
 	}
 }
 
-func convertBinUnit(query string) {
+func convertBinDec(query string) {
 	convertedQuery := strings.ReplaceAll(query, " ", "")
 
 	result, err := strconv.ParseInt(convertedQuery, 2, 64)
@@ -103,7 +105,7 @@ func convertBinUnit(query string) {
 	}
 }
 
-func convertHexUnit(query string) {
+func convertHex2Dec(query string) {
 	if query[0] == '#' {
 		query = query[1:]
 	}

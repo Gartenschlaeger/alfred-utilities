@@ -1,4 +1,4 @@
-module go-alfred
+module Gartenschlaeger/go-alfred-converters
 
 go 1.17
 
