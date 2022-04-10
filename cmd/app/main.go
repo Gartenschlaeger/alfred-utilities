@@ -2,8 +2,6 @@ package main
 
 import (
 	"log"
-	"strconv"
-	"strings"
 
 	aw "github.com/deanishe/awgo"
 	"go.deanishe.net/env"
@@ -27,20 +25,20 @@ func run() {
 
 	log.Printf("Arguments count = %v\n", len(args))
 
-	query := args[0]
-	values := strings.Fields(query)
+	// query := args[0]
+	// values := strings.Fields(query)
 
-	results := []string{}
-	for i := 0; i < len(values); i++ {
-		n, err := strconv.ParseInt(values[i], 16, 64)
-		if err != nil {
-			results = append(results, "ERR")
-		} else {
-			results = append(results, strconv.FormatInt(n, 10))
-		}
-	}
+	// results := []string{}
+	// for i := 0; i < len(values); i++ {
+	// 	n, err := strconv.ParseInt(values[i], 16, 64)
+	// 	if err != nil {
+	// 		results = append(results, "ERR")
+	// 	} else {
+	// 		results = append(results, strconv.FormatInt(n, 10))
+	// 	}
+	// }
 
-	wf.NewItem(strings.Join(results, " "))
+	// wf.NewItem(strings.Join(results, " "))
 
 	wf.SendFeedback()
 
