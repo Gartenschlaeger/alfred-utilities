@@ -125,6 +125,13 @@ func convertDec2Bin(query string) {
 		b = pl + b
 	}
 
+	// add whitespaces between byte blocks of 8 characters
+	if len(b) > 8 {
+		for i := len(b) - 8; i >= 7; i -= 8 {
+			b = b[:i] + " " + b[i:]
+		}
+	}
+
 	item := wf.NewItem(b)
 	item.Valid(true)
 	item.Arg(b)
