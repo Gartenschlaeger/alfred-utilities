@@ -104,15 +104,20 @@ func convertBinUnit(query string) {
 }
 
 func convertHexUnit(query string) {
+	if query[0] == '#' {
+		query = query[1:]
+	}
+
 	fields := strings.Fields(query)
 
 	results := []string{}
 	for i := 0; i < len(fields); i++ {
-		n, err := strconv.ParseInt(fields[i], 16, 64)
+		f := fields[i]
+		h, err := strconv.ParseInt(f, 16, 64)
 		if err != nil {
 			panic(err)
 		} else {
-			results = append(results, strconv.FormatInt(n, 10))
+			results = append(results, strconv.FormatInt(h, 10))
 		}
 	}
 
