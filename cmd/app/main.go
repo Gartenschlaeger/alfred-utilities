@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net/url"
 	"strconv"
 	"strings"
 
@@ -34,12 +35,57 @@ func run() {
 		convertBinUnit(query)
 	case "hex":
 		convertHexUnit(query)
+	case "url":
+		convertUrl(query)
 
 	default:
 		panic(fmt.Sprintf("%v is an unknown unit", unit))
 	}
 
 	wf.SendFeedback()
+}
+
+func addItem(title string, subTitle string, copyText string) {
+	item := wf.NewItem(title)
+	item.Subtitle(subTitle)
+	item.Arg(copyText)
+	item.Valid(true)
+}
+
+func convertUrl(query string) {
+	url, err := url.Parse(query)
+	if err != nil {
+		panic(err)
+	}
+
+	if len(url.Scheme) > 0 {
+		addItem("Scheme", url.Scheme, url.Scheme)
+	}
+
+	if len(url.Host) > 0 {
+		addItem("Host", url.Host, url.Host)
+	}
+
+	urlPort := url.Port()
+	if len(urlPort) > 0 {
+		addItem("Port", urlPort, urlPort)
+	}
+
+	if len(url.Path) > 0 {
+		addItem("Path", url.Path, url.Path)
+	}
+
+	if len(url.Fragment) > 0 {
+		addItem("Fragment", url.Fragment, url.Fragment)
+	}
+
+	urlQuery := url.Query()
+	for k, v := range urlQuery {
+		queryItem := wf.NewItem(fmt.Sprintf("Query param '%s'", k))
+		queryItem.Subtitle(v[0])
+		queryItem.Arg(fmt.Sprintf("%s=%s", k, v[0]))
+		queryItem.Valid(true)
+	}
 }
 
 func convertBinUnit(query string) {
