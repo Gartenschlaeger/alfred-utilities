@@ -1,5 +1,7 @@
 # Development
 
+Contains small utilities for converting or parsing values via Alfred workflows. 
+
 ## Start
 
 ~~~sh
