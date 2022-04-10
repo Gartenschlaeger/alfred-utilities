@@ -33,9 +33,14 @@ func run() {
 	switch operation {
 
 	case "bin2dec":
-		convertBinDec(query)
+		convertBin2Dec(query)
+	case "dec2bin":
+		convertDec2Bin(query)
+
 	case "hex2dec":
 		convertHex2Dec(query)
+	case "dec2hex":
+		convertDec2Hex(query)
 
 	case "url":
 		parseUrl(query)
@@ -90,7 +95,7 @@ func parseUrl(query string) {
 	}
 }
 
-func convertBinDec(query string) {
+func convertBin2Dec(query string) {
 	convertedQuery := strings.ReplaceAll(query, " ", "")
 
 	result, err := strconv.ParseInt(convertedQuery, 2, 64)
@@ -103,6 +108,26 @@ func convertBinDec(query string) {
 		item.Valid(true)
 		item.Arg(convertedResult)
 	}
+}
+
+func convertDec2Bin(query string) {
+	n, err := strconv.ParseInt(query, 10, 64)
+	if err != nil {
+		panic(err)
+	}
+
+	b := strconv.FormatInt(n, 2)
+
+	// pad string with zeros to have 8 chacters per byte
+	d := len(b) % 8
+	if d != 0 {
+		pl := strings.Repeat("0", 8-d)
+		b = pl + b
+	}
+
+	item := wf.NewItem(b)
+	item.Valid(true)
+	item.Arg(b)
 }
 
 func convertHex2Dec(query string) {
@@ -128,4 +153,17 @@ func convertHex2Dec(query string) {
 	item := wf.NewItem(convertedResult)
 	item.Valid(true)
 	item.Arg(convertedResult)
+}
+
+func convertDec2Hex(query string) {
+	n, err := strconv.Atoi(query)
+	if err != nil {
+		panic(err)
+	}
+
+	h := fmt.Sprintf("%x", n)
+
+	item := wf.NewItem(h)
+	item.Valid(true)
+	item.Arg(h)
 }
