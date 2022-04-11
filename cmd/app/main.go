@@ -55,6 +55,9 @@ func run() {
 	case "shuffle":
 		shuffle(query)
 
+	case "dice":
+		dice(query)
+
 	default:
 		panic(fmt.Sprintf("'%s' is an unknown operation", operation))
 	}
@@ -210,4 +213,24 @@ func shuffle(query string) {
 
 	sv := string(inRune)
 	addWorkflowItem("Shuffled value", sv, sv)
+}
+
+func dice(query string) {
+	max := 6
+
+	if len(query) > 0 {
+		rn, err := strconv.Atoi(query)
+		if err != nil {
+			panic(err)
+		}
+
+		max = rn
+	}
+
+	rand.Seed(time.Now().Unix())
+	n := rand.Intn(max)
+
+	r := strconv.Itoa(n)
+
+	addWorkflowItem("Random number", r, r)
 }
