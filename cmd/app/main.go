@@ -42,6 +42,11 @@ func run() {
 	case "dec2hex":
 		convertDec2Hex(query)
 
+	case "encode":
+		encode(query)
+	case "decode":
+		decode(query)
+
 	case "url":
 		parseUrl(query)
 
@@ -173,4 +178,19 @@ func convertDec2Hex(query string) {
 	item := wf.NewItem(h)
 	item.Valid(true)
 	item.Arg(h)
+}
+
+func encode(query string) {
+	r := url.QueryEscape(query)
+
+	addWorkflowItem("Encoded value", r, r)
+}
+
+func decode(query string) {
+	r, err := url.QueryUnescape(query)
+	if err != nil {
+		panic(err)
+	}
+
+	addWorkflowItem("Decoded value", r, r)
 }
