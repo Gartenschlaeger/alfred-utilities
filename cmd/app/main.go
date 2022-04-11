@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"net/url"
 	"strconv"
 	"strings"
+	"time"
 
 	aw "github.com/deanishe/awgo"
 )
@@ -49,6 +51,9 @@ func run() {
 
 	case "url":
 		parseUrl(query)
+
+	case "shuffle":
+		shuffle(query)
 
 	default:
 		panic(fmt.Sprintf("'%s' is an unknown operation", operation))
@@ -193,4 +198,16 @@ func decode(query string) {
 	}
 
 	addWorkflowItem("Decoded value", r, r)
+}
+
+func shuffle(query string) {
+	rand.Seed(time.Now().Unix())
+
+	inRune := []rune(query)
+	rand.Shuffle(len(inRune), func(i, j int) {
+		inRune[i], inRune[j] = inRune[j], inRune[i]
+	})
+
+	sv := string(inRune)
+	addWorkflowItem("Shuffled value", sv, sv)
 }
