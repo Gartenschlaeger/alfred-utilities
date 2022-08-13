@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bytes"
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"math/rand"
 	"net/url"
@@ -46,9 +48,9 @@ func run() {
 		convertDec2Hex(query)
 
 	case "encode":
-		encode(query)
+		encodeUri(query)
 	case "decode":
-		decode(query)
+		decodeUri(query)
 
 	case "url":
 		parseUrl(query)
@@ -60,9 +62,14 @@ func run() {
 		dice(query)
 
 	case "base64enc":
-		base64enc(query)
+		base64Encode(query)
 	case "base64dec":
-		base64dec(query)
+		base64Decode(query)
+
+	case "jsonfmt":
+		jsonFormat(query)
+	case "jsonmin":
+		jsonMinimize(query)
 
 	default:
 		panic(fmt.Sprintf("'%s' is an unknown operation", operation))
@@ -194,13 +201,13 @@ func convertDec2Hex(query string) {
 	item.Arg(h)
 }
 
-func encode(query string) {
+func encodeUri(query string) {
 	r := url.QueryEscape(query)
 
 	addWorkflowItem("Encoded value", r, r)
 }
 
-func decode(query string) {
+func decodeUri(query string) {
 	r, err := url.QueryUnescape(query)
 	if err != nil {
 		panic(err)
@@ -241,19 +248,44 @@ func dice(query string) {
 	addWorkflowItem("Random number", r, r)
 }
 
-func base64enc(query string) {
+func base64Encode(query string) {
 	data := []byte(query)
 	encodedString := base64.StdEncoding.EncodeToString(data)
 
 	addWorkflowItem("Base64 encoded value", encodedString, encodedString)
 }
 
-func base64dec(query string) {
+func base64Decode(query string) {
 	data, err := base64.StdEncoding.DecodeString(query)
 	if err != nil {
 		panic(err)
 	}
 
 	decodedString := string(data)
+
 	addWorkflowItem("Base64 decoded value", decodedString, decodedString)
+}
+
+func jsonFormat(query string) {
+	var out bytes.Buffer
+
+	err := json.Indent(&out, []byte(query), "", "    ")
+	if err != nil {
+		panic(err)
+	}
+
+	formatedValue := out.String()
+	addWorkflowItem("JSON formated", formatedValue, formatedValue)
+}
+
+func jsonMinimize(query string) {
+	var out bytes.Buffer
+
+	err := json.Compact(&out, []byte(query))
+	if err != nil {
+		panic(err)
+	}
+
+	formattedValue := out.String()
+	addWorkflowItem("JSON minimized", formattedValue, formattedValue)
 }
