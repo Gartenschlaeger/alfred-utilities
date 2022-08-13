@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/base64"
 	"fmt"
 	"math/rand"
 	"net/url"
@@ -57,6 +58,11 @@ func run() {
 
 	case "dice":
 		dice(query)
+
+	case "base64enc":
+		base64enc(query)
+	case "base64dec":
+		base64dec(query)
 
 	default:
 		panic(fmt.Sprintf("'%s' is an unknown operation", operation))
@@ -233,4 +239,21 @@ func dice(query string) {
 	r := strconv.Itoa(n)
 
 	addWorkflowItem("Random number", r, r)
+}
+
+func base64enc(query string) {
+	data := []byte(query)
+	encodedString := base64.StdEncoding.EncodeToString(data)
+
+	addWorkflowItem("Base64 encoded value", encodedString, encodedString)
+}
+
+func base64dec(query string) {
+	data, err := base64.StdEncoding.DecodeString(query)
+	if err != nil {
+		panic(err)
+	}
+
+	decodedString := string(data)
+	addWorkflowItem("Base64 decoded value", decodedString, decodedString)
 }
